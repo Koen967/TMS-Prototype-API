@@ -1,0 +1,744 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PrototypeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="accountNumber" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="VATNumber" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="locationId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Container">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="number" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="size" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="rental" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ContainerLocation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="containerId" Type="int" Nullable="false" />
+          <Property Name="locationId" Type="int" Nullable="false" />
+          <Property Name="locationDate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Driver">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="dateOfBirth" Type="date" Nullable="false" />
+          <Property Name="nationality" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="companyId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="longtitude" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="latitude" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Truck">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="number" Type="int" Nullable="false" />
+          <Property Name="brand" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="licencePlate" Type="char" MaxLength="8" Nullable="false" />
+          <Property Name="chassis" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="rental" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TruckContainer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="truckId" Type="int" Nullable="false" />
+          <Property Name="containerId" Type="int" Nullable="false" />
+          <Property Name="coupleDate" Type="date" Nullable="false" />
+          <Property Name="decoupleDate" Type="date" />
+        </EntityType>
+        <EntityType Name="TruckDriver">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="truckId" Type="int" Nullable="false" />
+          <Property Name="driverId" Type="int" Nullable="false" />
+          <Property Name="startDate" Type="date" Nullable="false" />
+          <Property Name="endDate" Type="date" />
+        </EntityType>
+        <EntityType Name="TruckLocation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="truckId" Type="int" Nullable="false" />
+          <Property Name="locationId" Type="int" Nullable="false" />
+          <Property Name="locationDate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userName" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="254" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="254" Nullable="false" />
+          <Property Name="passwordSalt" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CompanyLocationId">
+          <End Role="Location" Type="Self.Location" Multiplicity="1" />
+          <End Role="Company" Type="Self.Company" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="locationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContainerLocationContainerId">
+          <End Role="Container" Type="Self.Container" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ContainerLocation" Type="Self.ContainerLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ContainerLocation">
+              <PropertyRef Name="containerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContainerLocationLocationId">
+          <End Role="Location" Type="Self.Location" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ContainerLocation" Type="Self.ContainerLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ContainerLocation">
+              <PropertyRef Name="locationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DriverCompanyId">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Driver" Type="Self.Driver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Driver">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckContainerContainerId">
+          <End Role="Container" Type="Self.Container" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TruckContainer" Type="Self.TruckContainer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckContainer">
+              <PropertyRef Name="containerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckContainerTruckId">
+          <End Role="Truck" Type="Self.Truck" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TruckContainer" Type="Self.TruckContainer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Truck">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckContainer">
+              <PropertyRef Name="truckId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckDriverDriverId">
+          <End Role="Driver" Type="Self.Driver" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TruckDriver" Type="Self.TruckDriver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckDriver">
+              <PropertyRef Name="driverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckDriverTruckId">
+          <End Role="Truck" Type="Self.Truck" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TruckDriver" Type="Self.TruckDriver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Truck">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckDriver">
+              <PropertyRef Name="truckId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckLocationLocationId">
+          <End Role="Location" Type="Self.Location" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TruckLocation" Type="Self.TruckLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckLocation">
+              <PropertyRef Name="locationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckLocationTruckId">
+          <End Role="Truck" Type="Self.Truck" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TruckLocation" Type="Self.TruckLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Truck">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckLocation">
+              <PropertyRef Name="truckId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PrototypeModelStoreContainer">
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Container" EntityType="Self.Container" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ContainerLocation" EntityType="Self.ContainerLocation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Driver" EntityType="Self.Driver" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Truck" EntityType="Self.Truck" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TruckContainer" EntityType="Self.TruckContainer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TruckDriver" EntityType="Self.TruckDriver" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TruckLocation" EntityType="Self.TruckLocation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CompanyLocationId" Association="Self.FK_CompanyLocationId">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="Company" EntitySet="Company" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContainerLocationContainerId" Association="Self.FK_ContainerLocationContainerId">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="ContainerLocation" EntitySet="ContainerLocation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContainerLocationLocationId" Association="Self.FK_ContainerLocationLocationId">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="ContainerLocation" EntitySet="ContainerLocation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DriverCompanyId" Association="Self.FK_DriverCompanyId">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Driver" EntitySet="Driver" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckContainerContainerId" Association="Self.FK_TruckContainerContainerId">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="TruckContainer" EntitySet="TruckContainer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckContainerTruckId" Association="Self.FK_TruckContainerTruckId">
+            <End Role="Truck" EntitySet="Truck" />
+            <End Role="TruckContainer" EntitySet="TruckContainer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckDriverDriverId" Association="Self.FK_TruckDriverDriverId">
+            <End Role="Driver" EntitySet="Driver" />
+            <End Role="TruckDriver" EntitySet="TruckDriver" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckDriverTruckId" Association="Self.FK_TruckDriverTruckId">
+            <End Role="Truck" EntitySet="Truck" />
+            <End Role="TruckDriver" EntitySet="TruckDriver" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckLocationLocationId" Association="Self.FK_TruckLocationLocationId">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="TruckLocation" EntitySet="TruckLocation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckLocationTruckId" Association="Self.FK_TruckLocationTruckId">
+            <End Role="Truck" EntitySet="Truck" />
+            <End Role="TruckLocation" EntitySet="TruckLocation" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PrototypeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PrototypeEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Companies" EntityType="PrototypeModel.Company" />
+          <EntitySet Name="Containers" EntityType="PrototypeModel.Container" />
+          <EntitySet Name="ContainerLocations" EntityType="PrototypeModel.ContainerLocation" />
+          <EntitySet Name="Drivers" EntityType="PrototypeModel.Driver" />
+          <EntitySet Name="Locations" EntityType="PrototypeModel.Location" />
+          <EntitySet Name="Trucks" EntityType="PrototypeModel.Truck" />
+          <EntitySet Name="TruckContainers" EntityType="PrototypeModel.TruckContainer" />
+          <EntitySet Name="TruckDrivers" EntityType="PrototypeModel.TruckDriver" />
+          <EntitySet Name="TruckLocations" EntityType="PrototypeModel.TruckLocation" />
+          <AssociationSet Name="FK_CompanyLocationId" Association="PrototypeModel.FK_CompanyLocationId">
+            <End Role="Location" EntitySet="Locations" />
+            <End Role="Company" EntitySet="Companies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DriverCompanyId" Association="PrototypeModel.FK_DriverCompanyId">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Driver" EntitySet="Drivers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContainerLocationContainerId" Association="PrototypeModel.FK_ContainerLocationContainerId">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="ContainerLocation" EntitySet="ContainerLocations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckContainerContainerId" Association="PrototypeModel.FK_TruckContainerContainerId">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="TruckContainer" EntitySet="TruckContainers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContainerLocationLocationId" Association="PrototypeModel.FK_ContainerLocationLocationId">
+            <End Role="Location" EntitySet="Locations" />
+            <End Role="ContainerLocation" EntitySet="ContainerLocations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckDriverDriverId" Association="PrototypeModel.FK_TruckDriverDriverId">
+            <End Role="Driver" EntitySet="Drivers" />
+            <End Role="TruckDriver" EntitySet="TruckDrivers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckLocationLocationId" Association="PrototypeModel.FK_TruckLocationLocationId">
+            <End Role="Location" EntitySet="Locations" />
+            <End Role="TruckLocation" EntitySet="TruckLocations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckContainerTruckId" Association="PrototypeModel.FK_TruckContainerTruckId">
+            <End Role="Truck" EntitySet="Trucks" />
+            <End Role="TruckContainer" EntitySet="TruckContainers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckDriverTruckId" Association="PrototypeModel.FK_TruckDriverTruckId">
+            <End Role="Truck" EntitySet="Trucks" />
+            <End Role="TruckDriver" EntitySet="TruckDrivers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TruckLocationTruckId" Association="PrototypeModel.FK_TruckLocationTruckId">
+            <End Role="Truck" EntitySet="Trucks" />
+            <End Role="TruckLocation" EntitySet="TruckLocations" />
+          </AssociationSet>
+          <EntitySet Name="Users" EntityType="PrototypeModel.User" />
+        </EntityContainer>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="accountNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="VATNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="locationId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Location" Relationship="PrototypeModel.FK_CompanyLocationId" FromRole="Company" ToRole="Location" />
+          <NavigationProperty Name="Drivers" Relationship="PrototypeModel.FK_DriverCompanyId" FromRole="Company" ToRole="Driver" />
+        </EntityType>
+        <EntityType Name="Container">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="number" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="size" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="rental" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ContainerLocations" Relationship="PrototypeModel.FK_ContainerLocationContainerId" FromRole="Container" ToRole="ContainerLocation" />
+          <NavigationProperty Name="TruckContainers" Relationship="PrototypeModel.FK_TruckContainerContainerId" FromRole="Container" ToRole="TruckContainer" />
+        </EntityType>
+        <EntityType Name="ContainerLocation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="containerId" Type="Int32" Nullable="false" />
+          <Property Name="locationId" Type="Int32" Nullable="false" />
+          <Property Name="locationDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Container" Relationship="PrototypeModel.FK_ContainerLocationContainerId" FromRole="ContainerLocation" ToRole="Container" />
+          <NavigationProperty Name="Location" Relationship="PrototypeModel.FK_ContainerLocationLocationId" FromRole="ContainerLocation" ToRole="Location" />
+        </EntityType>
+        <EntityType Name="Driver">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dateOfBirth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="nationality" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="companyId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Company" Relationship="PrototypeModel.FK_DriverCompanyId" FromRole="Driver" ToRole="Company" />
+          <NavigationProperty Name="TruckDrivers" Relationship="PrototypeModel.FK_TruckDriverDriverId" FromRole="Driver" ToRole="TruckDriver" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="longtitude" Type="Decimal" Nullable="false" Precision="10" Scale="0" />
+          <Property Name="latitude" Type="Decimal" Nullable="false" Precision="10" Scale="0" />
+          <Property Name="type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Companies" Relationship="PrototypeModel.FK_CompanyLocationId" FromRole="Location" ToRole="Company" />
+          <NavigationProperty Name="ContainerLocations" Relationship="PrototypeModel.FK_ContainerLocationLocationId" FromRole="Location" ToRole="ContainerLocation" />
+          <NavigationProperty Name="TruckLocations" Relationship="PrototypeModel.FK_TruckLocationLocationId" FromRole="Location" ToRole="TruckLocation" />
+        </EntityType>
+        <EntityType Name="Truck">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="number" Type="Int32" Nullable="false" />
+          <Property Name="brand" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="licencePlate" Type="String" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="chassis" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="rental" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="TruckContainers" Relationship="PrototypeModel.FK_TruckContainerTruckId" FromRole="Truck" ToRole="TruckContainer" />
+          <NavigationProperty Name="TruckDrivers" Relationship="PrototypeModel.FK_TruckDriverTruckId" FromRole="Truck" ToRole="TruckDriver" />
+          <NavigationProperty Name="TruckLocations" Relationship="PrototypeModel.FK_TruckLocationTruckId" FromRole="Truck" ToRole="TruckLocation" />
+        </EntityType>
+        <EntityType Name="TruckContainer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="truckId" Type="Int32" Nullable="false" />
+          <Property Name="containerId" Type="Int32" Nullable="false" />
+          <Property Name="coupleDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="decoupleDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Container" Relationship="PrototypeModel.FK_TruckContainerContainerId" FromRole="TruckContainer" ToRole="Container" />
+          <NavigationProperty Name="Truck" Relationship="PrototypeModel.FK_TruckContainerTruckId" FromRole="TruckContainer" ToRole="Truck" />
+        </EntityType>
+        <EntityType Name="TruckDriver">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="truckId" Type="Int32" Nullable="false" />
+          <Property Name="driverId" Type="Int32" Nullable="false" />
+          <Property Name="startDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="endDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Driver" Relationship="PrototypeModel.FK_TruckDriverDriverId" FromRole="TruckDriver" ToRole="Driver" />
+          <NavigationProperty Name="Truck" Relationship="PrototypeModel.FK_TruckDriverTruckId" FromRole="TruckDriver" ToRole="Truck" />
+        </EntityType>
+        <EntityType Name="TruckLocation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="truckId" Type="Int32" Nullable="false" />
+          <Property Name="locationId" Type="Int32" Nullable="false" />
+          <Property Name="locationDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Location" Relationship="PrototypeModel.FK_TruckLocationLocationId" FromRole="TruckLocation" ToRole="Location" />
+          <NavigationProperty Name="Truck" Relationship="PrototypeModel.FK_TruckLocationTruckId" FromRole="TruckLocation" ToRole="Truck" />
+        </EntityType>
+        <Association Name="FK_CompanyLocationId">
+          <End Type="PrototypeModel.Location" Role="Location" Multiplicity="1" />
+          <End Type="PrototypeModel.Company" Role="Company" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="locationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DriverCompanyId">
+          <End Type="PrototypeModel.Company" Role="Company" Multiplicity="1" />
+          <End Type="PrototypeModel.Driver" Role="Driver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Driver">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContainerLocationContainerId">
+          <End Type="PrototypeModel.Container" Role="Container" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="PrototypeModel.ContainerLocation" Role="ContainerLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ContainerLocation">
+              <PropertyRef Name="containerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckContainerContainerId">
+          <End Type="PrototypeModel.Container" Role="Container" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="PrototypeModel.TruckContainer" Role="TruckContainer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckContainer">
+              <PropertyRef Name="containerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContainerLocationLocationId">
+          <End Type="PrototypeModel.Location" Role="Location" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="PrototypeModel.ContainerLocation" Role="ContainerLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ContainerLocation">
+              <PropertyRef Name="locationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckDriverDriverId">
+          <End Type="PrototypeModel.Driver" Role="Driver" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="PrototypeModel.TruckDriver" Role="TruckDriver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckDriver">
+              <PropertyRef Name="driverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckLocationLocationId">
+          <End Type="PrototypeModel.Location" Role="Location" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="PrototypeModel.TruckLocation" Role="TruckLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckLocation">
+              <PropertyRef Name="locationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckContainerTruckId">
+          <End Type="PrototypeModel.Truck" Role="Truck" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="PrototypeModel.TruckContainer" Role="TruckContainer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Truck">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckContainer">
+              <PropertyRef Name="truckId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckDriverTruckId">
+          <End Type="PrototypeModel.Truck" Role="Truck" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="PrototypeModel.TruckDriver" Role="TruckDriver" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Truck">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckDriver">
+              <PropertyRef Name="truckId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TruckLocationTruckId">
+          <End Type="PrototypeModel.Truck" Role="Truck" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="PrototypeModel.TruckLocation" Role="TruckLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Truck">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TruckLocation">
+              <PropertyRef Name="truckId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userName" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="254" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="254" FixedLength="false" Unicode="false" />
+          <Property Name="passwordSalt" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PrototypeModelStoreContainer" CdmEntityContainer="PrototypeEntities">
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="PrototypeModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="locationId" ColumnName="locationId" />
+                <ScalarProperty Name="VATNumber" ColumnName="VATNumber" />
+                <ScalarProperty Name="accountNumber" ColumnName="accountNumber" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Containers">
+            <EntityTypeMapping TypeName="PrototypeModel.Container">
+              <MappingFragment StoreEntitySet="Container">
+                <ScalarProperty Name="rental" ColumnName="rental" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="size" ColumnName="size" />
+                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ContainerLocations">
+            <EntityTypeMapping TypeName="PrototypeModel.ContainerLocation">
+              <MappingFragment StoreEntitySet="ContainerLocation">
+                <ScalarProperty Name="locationDate" ColumnName="locationDate" />
+                <ScalarProperty Name="locationId" ColumnName="locationId" />
+                <ScalarProperty Name="containerId" ColumnName="containerId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Drivers">
+            <EntityTypeMapping TypeName="PrototypeModel.Driver">
+              <MappingFragment StoreEntitySet="Driver">
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+                <ScalarProperty Name="nationality" ColumnName="nationality" />
+                <ScalarProperty Name="dateOfBirth" ColumnName="dateOfBirth" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Locations">
+            <EntityTypeMapping TypeName="PrototypeModel.Location">
+              <MappingFragment StoreEntitySet="Location">
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longtitude" ColumnName="longtitude" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trucks">
+            <EntityTypeMapping TypeName="PrototypeModel.Truck">
+              <MappingFragment StoreEntitySet="Truck">
+                <ScalarProperty Name="rental" ColumnName="rental" />
+                <ScalarProperty Name="chassis" ColumnName="chassis" />
+                <ScalarProperty Name="licencePlate" ColumnName="licencePlate" />
+                <ScalarProperty Name="brand" ColumnName="brand" />
+                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TruckContainers">
+            <EntityTypeMapping TypeName="PrototypeModel.TruckContainer">
+              <MappingFragment StoreEntitySet="TruckContainer">
+                <ScalarProperty Name="decoupleDate" ColumnName="decoupleDate" />
+                <ScalarProperty Name="coupleDate" ColumnName="coupleDate" />
+                <ScalarProperty Name="containerId" ColumnName="containerId" />
+                <ScalarProperty Name="truckId" ColumnName="truckId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TruckDrivers">
+            <EntityTypeMapping TypeName="PrototypeModel.TruckDriver">
+              <MappingFragment StoreEntitySet="TruckDriver">
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="driverId" ColumnName="driverId" />
+                <ScalarProperty Name="truckId" ColumnName="truckId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TruckLocations">
+            <EntityTypeMapping TypeName="PrototypeModel.TruckLocation">
+              <MappingFragment StoreEntitySet="TruckLocation">
+                <ScalarProperty Name="locationDate" ColumnName="locationDate" />
+                <ScalarProperty Name="locationId" ColumnName="locationId" />
+                <ScalarProperty Name="truckId" ColumnName="truckId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="PrototypeModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="passwordSalt" ColumnName="passwordSalt" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

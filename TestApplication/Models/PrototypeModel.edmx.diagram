@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="60bf4046d17746d389d2061919f09c50" Name="Diagram1" ZoomLevel="59">
+        <EntityTypeShape EntityType="PrototypeModel.Company" Width="1.5" PointX="1.5" PointY="12.875" />
+        <EntityTypeShape EntityType="PrototypeModel.Container" Width="1.5" PointX="0.75" PointY="8.875" />
+        <EntityTypeShape EntityType="PrototypeModel.ContainerLocation" Width="1.5" PointX="6" PointY="1.875" />
+        <EntityTypeShape EntityType="PrototypeModel.Driver" Width="1.5" PointX="3.75" PointY="12.875" />
+        <EntityTypeShape EntityType="PrototypeModel.Location" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PrototypeModel.Truck" Width="1.5" PointX="0.75" PointY="4.625" />
+        <EntityTypeShape EntityType="PrototypeModel.TruckContainer" Width="1.5" PointX="3" PointY="4.875" />
+        <EntityTypeShape EntityType="PrototypeModel.TruckDriver" Width="1.5" PointX="6" PointY="4.875" />
+        <EntityTypeShape EntityType="PrototypeModel.TruckLocation" Width="1.5" PointX="3" PointY="2" />
+        <AssociationConnector Association="PrototypeModel.FK_CompanyLocationId" />
+        <AssociationConnector Association="PrototypeModel.FK_DriverCompanyId" />
+        <AssociationConnector Association="PrototypeModel.FK_ContainerLocationContainerId" />
+        <AssociationConnector Association="PrototypeModel.FK_TruckContainerContainerId" />
+        <AssociationConnector Association="PrototypeModel.FK_ContainerLocationLocationId" />
+        <AssociationConnector Association="PrototypeModel.FK_TruckDriverDriverId" />
+        <AssociationConnector Association="PrototypeModel.FK_TruckLocationLocationId" />
+        <AssociationConnector Association="PrototypeModel.FK_TruckContainerTruckId" />
+        <AssociationConnector Association="PrototypeModel.FK_TruckDriverTruckId" />
+        <AssociationConnector Association="PrototypeModel.FK_TruckLocationTruckId" />
+        <EntityTypeShape EntityType="PrototypeModel.User" Width="1.5" PointX="8.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
